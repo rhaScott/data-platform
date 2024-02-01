@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "data-platform"
+version = "0.1.0"
+description = "GCP data platform"
+authors = ["Robert Scott"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+dbt-bigquery = "^1.7.3"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.6.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

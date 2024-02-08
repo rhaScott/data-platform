@@ -7,3 +7,9 @@ jaffle_shop:
       project: data-platform-413021
       dataset: dev
       threads: 4
+    ci:
+      type: bigquery
+      method: oauth
+      project: data-platform-413021
+      dataset: ci
+      threads: 4

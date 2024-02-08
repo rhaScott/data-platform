@@ -25,9 +25,9 @@ models:
 
       - name: number_of_orders
         description: Count of the number of orders a customer has placed
-
-      - name: total_order_amount
-        description: Total value (AUD) of a customer's orders
+  
+      - name: customer_lifetime_value
+        description: Expected value of a customer's past and future orders
 
   - name: orders
     description: This table has basic information about orders, as well as some derived facts based on payments

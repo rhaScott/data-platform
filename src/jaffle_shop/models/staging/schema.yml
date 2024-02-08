@@ -7,6 +7,11 @@ models:
         tests:
           - unique
           - not_null
+        description: Unique identifier for a customer
+      - name: first_name
+        description: Customer's first name. PII
+      - name: last_name
+        description: Customer's last name. PII
 
   - name: stg_orders
     columns:
@@ -14,10 +19,16 @@ models:
         tests:
           - unique
           - not_null
+        description: Unique identifier for an order
       - name: status
         tests:
           - accepted_values:
               values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+        description: Status of the order. One of placed, shipped, completed, return_pending, returned.
+      - name: customer_id
+        description: Unique identifier for a customer
+      - name: order_date
+        description: Date (UTC) that the order was placed
 
   - name: stg_payments
     columns:
@@ -25,7 +36,13 @@ models:
         tests:
           - unique
           - not_null
+        description: Unique identifier for a payment
       - name: payment_method
         tests:
           - accepted_values:
               values: ['credit_card', 'coupon', 'bank_transfer', 'gift_card']
+        description: Method of payment. One of credit_card, coupon, bank_transfer, gift_card.
+      - name: order_id
+        description: Unique identifier for an order
+      - name: amount
+        description: Total amount (AUD) of the payment

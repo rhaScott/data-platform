@@ -1,0 +1,8 @@
+##dbt ignores
+target/
+dbt_packages/
+docs/
+
+#non-dbt project ignores
+venv/
+python/

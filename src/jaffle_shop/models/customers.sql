@@ -21,7 +21,7 @@ with
 
     customer_payments as (
 
-        select orders.customer_id, sum(amount) as total_amount
+        select orders.customer_id, sum(payments.amount) as total_amount
 
         from payments
 

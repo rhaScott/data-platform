@@ -1,0 +1,69 @@
+repos:
+  - repo: https://github.com/tconbeer/sqlfmt
+    rev: v0.18.0
+    hooks:
+      - id: sqlfmt
+        language_version: python
+        additional_dependencies: ['.[jinjafmt]']
+
+
+  - repo: https://github.com/dbt-checkpoint/dbt-checkpoint
+    rev: v1.1.1
+    hooks:
+      - id: dbt-clean
+        args:
+          - --cmd-flags=--no-clean-project-files-only
+      - id: dbt-deps
+      - id: dbt-compile
+        args:
+          [
+            "--cmd-flags",
+            "++target",
+            "ci",
+            "--",
+          ]
+      - id: dbt-run
+        args:
+          [
+            "--models",
+            "*",
+            "--cmd-flags",
+            "++target",
+            "ci",
+            "--",
+          ]
+      - id: dbt-docs-generate
+        args:
+          [
+            "--cmd-flags",
+            "++target",
+            "ci",
+          ]
+      - id: check-model-has-all-columns
+      - id: check-model-has-description
+        args: ["--exclude", "/macros/*|/docs/*", "--"]
+      - id: check-model-has-tests-by-name
+        name: Check the model has a unique test defined
+        args: ["--tests", "unique=1", "--"]
+      - id: check-source-has-freshness
+        args: ["--freshness", "warn_after", "--"]
+      - id: check-script-has-no-table-name
+        args: [--ignore-dotless-table]
+      - id: check-model-columns-have-desc
+      - id: check-source-has-loader
+      - id: check-model-has-properties-file
+      - id: check-column-desc-are-same
+      - id: dbt-test
+        args:
+          [
+            "--cmd-flags",
+            "++target",
+            "ci",
+            "--",
+          ]
+
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 2.3.5
+    hooks:
+      - id: sqlfluff-lint
+        additional_dependencies: ['dbt-bigquery==1.7.2', 'sqlfluff-templater-dbt']

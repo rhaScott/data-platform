@@ -2,6 +2,7 @@ version: 2
 
 models:
   - name: stg_customers
+    description: Staging model for customers
     columns:
       - name: customer_id
         tests:
@@ -14,6 +15,7 @@ models:
         description: Customer's last name. PII
 
   - name: stg_orders
+    description: Staging model for orders
     columns:
       - name: order_id
         tests:
@@ -31,6 +33,7 @@ models:
         description: Date (UTC) that the order was placed
 
   - name: stg_payments
+    description: Staging model for payments
     columns:
       - name: payment_id
         tests:

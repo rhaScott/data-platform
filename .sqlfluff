@@ -1,0 +1,19 @@
+[sqlfluff]
+exclude_rules = layout.indent, layout.cte_bracket, layout.select_targets, L029
+max_line_length = 99
+dialect = bigquery
+templater = dbt
+
+[sqlfluff:rules]
+capitalisation_policy = lower
+extended_capitalisation_policy = lower
+
+[sqlfluff:rules:convention.terminator]
+multiline_newline = True
+
+[sqlfluff:templater:dbt]
+project_dir = src/jaffle_shop/
+profiles_dir = src/jaffle_shop/
+profile = jaffle_shop
+target = ci
+apply_dbt_builtins = True

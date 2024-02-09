@@ -5,7 +5,10 @@ on:
   #schedule:
   #  - cron: "00 9 * * *"
 
-
+permissions:
+  contents: 'read'
+  id-token: 'write'
+  
 env:
   DBT_PROFILES_DIR: src/jaffle_shop
   DBT_PROJECT_DIR: src/jaffle_shop

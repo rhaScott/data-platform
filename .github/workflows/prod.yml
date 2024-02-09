@@ -8,7 +8,7 @@ on:
 permissions:
   contents: 'read'
   id-token: 'write'
-  
+
 env:
   DBT_PROFILES_DIR: src/jaffle_shop
   DBT_PROJECT_DIR: src/jaffle_shop
@@ -58,22 +58,18 @@ jobs:
         run: poetry install
         if: steps.cache.outputs.cache-hit != 'true'
 
-      - name: Test echo
-        run: |
-          echo "hello world!"
+      - name: dbt seed
+        run: dbt seed --target prod
 
-      #- name: dbt seed
-      #  run: dbt seed --target prod
+      - name: dbt run
+        run: dbt run --target prod
 
-      #- name: dbt run
-      #  run: dbt run --target prod
+      - name: dbt test
+        run: dbt test --target prod
 
-      #- name: dbt test
-      #  run: dbt test --target prod
-
-      #- name: Upload dbt manifest to GCS
-      #  id: upload-file
-      #  uses: 'google-github-actions/upload-cloud-storage@v2'
-      #  with:
-      #      path: '${{ env.DBT_TARGET_DIR }}/manifest.json'
-      #    destination: 'ci_workflow_demo/dbt_manifest'
+      - name: Upload dbt manifest to GCS
+        id: upload-file
+        uses: 'google-github-actions/upload-cloud-storage@v2'
+        with:
+            path: '${{ env.DBT_TARGET_DIR }}'
+          destination: 'data-platform'

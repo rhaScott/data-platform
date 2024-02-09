@@ -52,6 +52,7 @@ repos:
       - id: check-model-columns-have-desc
       - id: check-source-has-loader
       - id: check-model-has-properties-file
+        exclude: "macros/"
       - id: check-column-desc-are-same
       - id: dbt-test
         args:

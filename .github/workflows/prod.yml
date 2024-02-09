@@ -39,9 +39,9 @@ jobs:
 
       - name: Authenticate with GCP
         uses: 'google-github-actions/auth@v2'
-            with:
-              project_id: 'my-project'
-              workload_identity_provider: projects/336697166112/locations/global/workloadIdentityPools/github/providers/data-platform
+        with:
+          project_id: 'my-project'
+          workload_identity_provider: projects/336697166112/locations/global/workloadIdentityPools/github/providers/data-platform
 
       - name: Cache Poetry virtualenv
         uses: actions/cache@v4

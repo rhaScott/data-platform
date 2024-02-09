@@ -1,0 +1,75 @@
+name: prod
+
+on:
+  workflow_dispatch:
+  #schedule:
+  #  - cron: "00 9 * * *"
+
+
+env:
+  DBT_PROFILES_DIR: src/jaffle_shop
+  DBT_PROJECT_DIR: src/jaffle_shop
+  DBT_TARGET_DIR: src/jaffle_shop/target
+  DBT_KEYFILE_PATH: ${{ github.workspace }}/service_account.json
+  GCP_SERVICE_ACCOUNT_BASE64: ${{ secrets.GCP_SERVICE_ACCOUNT_BASE64 }} # base64 encoded service account keyfile
+  GCS_BUCKET_NAME: ci_workflow_demo
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Continuous Integration Dry Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+
+      - name: Set-up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10.x"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      #- name: Authenticate with GCP
+      #  uses: 'google-github-actions/auth@v2'
+      #  with:
+      #    credentials_json: ${{ secrets.BQ_SERVICE_ACCOUNT }} # annoyingly wants content, not path.
+
+      - name: Cache Poetry virtualenv
+        uses: actions/cache@v4
+        id: cache
+        with:
+          path: ~/.virtualenvs
+          key: poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            poetry-$
+
+      - name: Install Dependencies using Poetry
+        run: poetry install
+        if: steps.cache.outputs.cache-hit != 'true'
+
+
+      - name: Test echo
+        run: |
+          echo "hello world!"
+
+      #- name: dbt seed
+      #  run: dbt seed --target prod
+
+      #- name: dbt run
+      #  run: dbt run --target prod
+
+      #- name: dbt test
+      #  run: dbt test --target prod
+
+      #- name: Upload dbt manifest to GCS
+      #  id: upload-file
+      #  uses: 'google-github-actions/upload-cloud-storage@v2'
+      #  with:
+      #      path: '${{ env.DBT_TARGET_DIR }}/manifest.json'
+      #    destination: 'ci_workflow_demo/dbt_manifest'

@@ -2,7 +2,7 @@
 
     {%- if target.name == "ci" -%}
         {# Prefix GITHUB_RUN_NUMBER to the alias, so CI namespaces are distinct.#}
-        {{ env_var("GITHUB_RUN_NUMBER", "") ~ "_" ~ {{ node.name }} }}
+        {{ env_var("GITHUB_RUN_NUMBER", "") ~ "_" ~ node.name }}
 
     {%- elif custom_alias_name -%}
 

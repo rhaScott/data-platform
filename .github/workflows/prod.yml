@@ -11,7 +11,6 @@ env:
   DBT_PROJECT_DIR: src/jaffle_shop
   DBT_TARGET_DIR: src/jaffle_shop/target
   DBT_KEYFILE_PATH: ${{ github.workspace }}/service_account.json
-  GCP_SERVICE_ACCOUNT_BASE64: ${{ secrets.GCP_SERVICE_ACCOUNT_BASE64 }} # base64 encoded service account keyfile
   GCS_BUCKET_NAME: ci_workflow_demo
 
 defaults:
@@ -20,7 +19,7 @@ defaults:
 
 jobs:
   build:
-    name: Continuous Integration Dry Tests
+    name: prod
     runs-on: ubuntu-latest
 
     steps:
@@ -32,27 +31,30 @@ jobs:
         with:
           python-version: "3.10.x"
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+      - name: Install poetry
+        uses: snok/install-poetry@v1.0.0
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
 
-      #- name: Authenticate with GCP
-      #  uses: 'google-github-actions/auth@v2'
-      #  with:
-      #    credentials_json: ${{ secrets.BQ_SERVICE_ACCOUNT }} # annoyingly wants content, not path.
+      - name: Authenticate with GCP
+        uses: 'google-github-actions/auth@v2'
+            with:
+              project_id: 'my-project'
+              workload_identity_provider: projects/336697166112/locations/global/workloadIdentityPools/github/providers/data-platform
 
       - name: Cache Poetry virtualenv
         uses: actions/cache@v4
         id: cache
         with:
-          path: ~/.virtualenvs
-          key: poetry-${{ hashFiles('**/poetry.lock') }}
+          path: .venv
+          key: poetry-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             poetry-$
 
       - name: Install Dependencies using Poetry
         run: poetry install
         if: steps.cache.outputs.cache-hit != 'true'
-
 
       - name: Test echo
         run: |

@@ -5,17 +5,20 @@ jaffle_shop:
       type: bigquery
       method: oauth
       project: data-platform-413021
+      location: EU
       dataset: prod
       threads: 4
     dev:
       type: bigquery
       method: oauth
       project: data-platform-413021
+      location: EU
       dataset: "dev_{{ env_var('USER') }}"
       threads: 4
     ci:
       type: bigquery
       method: oauth
       project: data-platform-413021
+      location: EU
       dataset: "dev_{{ env_var('USER','ci') }}" # local collision with dev intended for pre-commit 
       threads: 4

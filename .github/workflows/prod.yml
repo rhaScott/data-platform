@@ -59,13 +59,13 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: dbt seed
-        run: dbt seed --target prod
+        run: poetry run dbt seed --target prod
 
       - name: dbt run
-        run: dbt run --target prod
+        run: poetry run dbt run --target prod
 
       - name: dbt test
-        run: dbt test --target prod
+        run: poetry run dbt test --target prod
 
       - name: Upload dbt manifest to GCS
         id: upload-file

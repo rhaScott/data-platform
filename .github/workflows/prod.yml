@@ -41,6 +41,7 @@ jobs:
       - name: Authenticate with GCP
         uses: 'google-github-actions/auth@v2'
         with:
+          token_format: access_token
           workload_identity_provider: projects/336697166112/locations/global/workloadIdentityPools/github/providers/data-platform
           service_account: data-platform@data-platform-413021.iam.gserviceaccount.com
 

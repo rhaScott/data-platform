@@ -55,7 +55,7 @@ jobs:
             poetry-$
 
       - name: Install Dependencies using Poetry
-        run: poetry install
+        run: poetry install -vv
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: dbt seed

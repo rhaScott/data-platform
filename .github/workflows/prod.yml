@@ -14,7 +14,6 @@ env:
   DBT_PROJECT_DIR: src/jaffle_shop
   DBT_TARGET_DIR: src/jaffle_shop/target
   DBT_KEYFILE_PATH: ${{ github.workspace }}/service_account.json
-  GCS_BUCKET_NAME: ci_workflow_demo
 
 defaults:
   run:
@@ -42,8 +41,9 @@ jobs:
       - name: Authenticate with GCP
         uses: 'google-github-actions/auth@v2'
         with:
-          project_id: 'my-project'
+          project_id: 'data-platform-413021'
           workload_identity_provider: projects/336697166112/locations/global/workloadIdentityPools/github/providers/data-platform
+          service_account_email: data-platform@data-platform-413021.iam.gserviceaccount.com
 
       - name: Cache Poetry virtualenv
         uses: actions/cache@v4

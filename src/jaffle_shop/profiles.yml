@@ -1,6 +1,12 @@
 jaffle_shop:
   target: dev
   outputs:
+    prod:
+      type: bigquery
+      method: oauth
+      project: data-platform-413021
+      dataset: prod
+      threads: 4
     dev:
       type: bigquery
       method: oauth

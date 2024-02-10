@@ -45,9 +45,6 @@ jobs:
           workload_identity_provider: projects/336697166112/locations/global/workloadIdentityPools/github/providers/data-platform
           service_account: data-platform@data-platform-413021.iam.gserviceaccount.com
 
-      - name: dbt debug
-        run: pip install dbt-bigquery && dbt debug
-
       - name: Cache Poetry virtualenv
         uses: actions/cache@v4
         id: cache
@@ -75,4 +72,5 @@ jobs:
         uses: 'google-github-actions/upload-cloud-storage@v2'
         with:
             path: '${{ env.DBT_TARGET_DIR }}'
-            destination: 'data-platform'
+            destination: 'data-platform-dbt-artifacts'
+            parent: false

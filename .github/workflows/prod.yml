@@ -3,8 +3,8 @@ name: prod
 on:
   workflow_dispatch:
   push:
-  #schedule:
-  #  - cron: "00 9 * * *"
+  schedule:
+    - cron: "00 9 * * *"
 
 permissions:
   contents: 'read'
@@ -14,7 +14,6 @@ env:
   DBT_PROFILES_DIR: src/jaffle_shop
   DBT_PROJECT_DIR: src/jaffle_shop
   DBT_TARGET_DIR: src/jaffle_shop/target
-  DBT_KEYFILE_PATH: ${{ github.workspace }}/service_account.json
 
 defaults:
   run:

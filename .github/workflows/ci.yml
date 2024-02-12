@@ -1,0 +1,77 @@
+name: ci
+
+on:
+  workflow_dispatch:
+  push:
+
+permissions:
+  contents: 'read'
+  id-token: 'write'
+
+env:
+  DBT_PROFILES_DIR: src/jaffle_shop
+  DBT_PROJECT_DIR: src/jaffle_shop
+  DBT_TARGET_DIR: src/jaffle_shop/target
+  GCS_DBT_MANIFEST_URL: gs://data-platform-dbt-artifacts/manifest.json
+  DBT_DEFERRED_MANIFEST_PATH: deferred_manifest.json
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+
+      - name: Set-up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10.x"
+
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Authenticate with GCP
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: projects/336697166112/locations/global/workloadIdentityPools/github/providers/data-platform
+          service_account: data-platform@data-platform-413021.iam.gserviceaccount.com
+
+      - name: Cache Poetry virtualenv
+        uses: actions/cache@v4
+        id: cache
+        with:
+          path: .venv
+          key: poetry-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            poetry-$
+
+      - name: Install Dependencies using Poetry
+        run: poetry install -vv
+        if: steps.cache.outputs.cache-hit != 'true'
+
+      - name: Download dbt artifacts from GCS
+        run: |
+          gsutil cp $GCS_DBT_MANIFEST_URL $DBT_DEFERRED_MANIFEST_PATH
+
+      - name: Conditionally set dbt slim-CI flags
+        run: |
+          if [ -f $DBT_DEFERRED_MANIFEST_PATH ]; then
+            echo "DBT_FLAGS=--select state:modified+ --defer --state $DBT_DEFERRED_MANIFEST_PATH" >> $GITHUB_ENV;
+          else
+            echo "DBT_FLAGS=" >> $GITHUB_ENV;
+          fi
+
+      - name: dbt seed
+        run: poetry run dbt seed --target ci
+
+      - name: dbt build
+        run: poetry run dbt build --target ci ${{ env.DBT_FLAGS }}
+

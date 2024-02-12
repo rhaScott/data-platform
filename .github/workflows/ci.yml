@@ -57,6 +57,9 @@ jobs:
         run: poetry install -vv
         if: steps.cache.outputs.cache-hit != 'true'
 
+      - name: GSutil Debug
+        run: gsutil ls
+
       - name: Download dbt artifacts from GCS
         run: |
           gsutil cp $GCS_DBT_MANIFEST_URL $DBT_DEFERRED_MANIFEST_PATH

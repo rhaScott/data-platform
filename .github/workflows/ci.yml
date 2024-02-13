@@ -13,7 +13,7 @@ env:
   DBT_PROJECT_DIR: src/jaffle_shop
   DBT_TARGET_DIR: src/jaffle_shop/target
   GCS_DBT_ARTIFACTS_URL: gs://data-platform-dbt-artifacts/target/*
-  DBT_DEFERRED_ARTIFACTS_PATH: $GITHUB_WORKSPACE/deferred_dbt_artifacts
+  DBT_DEFERRED_ARTIFACTS_PATH: ${{ github.workspace }}/deferred_dbt_artifacts
 
 defaults:
   run:
@@ -67,7 +67,7 @@ jobs:
       - name: Conditionally set dbt slim-CI flags
         run: |
           if [ -d $DBT_DEFERRED_ARTIFACTS_PATH ]; then
-            echo "DBT_FLAGS=--select state:modified+ --defer" >> $GITHUB_ENV;
+            echo "DBT_FLAGS=--select state:modified+ --defer --state ${{ env.DBT_DEFERRED_ARTIFACTS_PATH }}" >> $GITHUB_ENV;
           else
             echo "DBT_FLAGS=" >> $GITHUB_ENV;
           fi

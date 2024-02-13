@@ -75,6 +75,9 @@ jobs:
       - name: dbt seed
         run: poetry run dbt seed --target ci
 
+      - name: ls flags
+        run: echo $DBT_FLAGS
+        
       - name: dbt build
         run: poetry run dbt build --target ci $DBT_FLAGS
 

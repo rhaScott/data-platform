@@ -53,7 +53,7 @@ jobs:
             poetry-$
 
       - name: Install Dependencies using Poetry
-        run: poetry install -vv
+        run: poetry install
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: dbt seed
@@ -71,4 +71,3 @@ jobs:
         with:
             path: '${{ env.DBT_TARGET_DIR }}'
             destination: 'data-platform-dbt-artifacts'
-            parent: false

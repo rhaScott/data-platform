@@ -62,7 +62,7 @@ jobs:
 
       - name: Download dbt artifacts from GCS
         run: |
-          mkdir -p $DBT_STATE && gsutil cp -q $GCS_DBT_ARTIFACTS_URL $DBT_STATE
+          mkdir -p $DBT_STATE && gsutil cp $GCS_DBT_ARTIFACTS_URL $DBT_STATE
 
       - name: Conditionally set dbt slim-CI flags
         run: |

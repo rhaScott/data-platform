@@ -67,7 +67,7 @@ jobs:
       - name: Conditionally set dbt slim-CI flags
         run: |
           if [ -d $DBT_DEFERRED_ARTIFACTS_PATH ]; then
-            echo "DBT_FLAGS=--select state:modified+ --defer --state ${{ env.DBT_DEFERRED_ARTIFACTS_PATH }}" >> $GITHUB_ENV;
+            echo "DBT_FLAGS=--select state:modified+ --defer" >> $GITHUB_ENV;
           else
             echo "DBT_FLAGS=" >> $GITHUB_ENV;
           fi
@@ -77,7 +77,13 @@ jobs:
 
       - name: ls flags
         run: echo $DBT_FLAGS
-        
+
+      - name: ls dir contents
+        run: ls $DBT_DEFERRED_ARTIFACTS_PATH
+
+      - name: export 
+        run: export DBT_STATE=${{ env.DBT_DEFERRED_ARTIFACTS_PATH }}
+
       - name: dbt build
         run: poetry run dbt build --target ci $DBT_FLAGS
 

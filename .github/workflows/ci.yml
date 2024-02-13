@@ -12,7 +12,7 @@ env:
   DBT_PROFILES_DIR: src/jaffle_shop
   DBT_PROJECT_DIR: src/jaffle_shop
   DBT_TARGET_DIR: src/jaffle_shop/target
-  GCS_DBT_ARTIFACTS_URL: gs://data-platform-dbt-artifacts/target
+  GCS_DBT_ARTIFACTS_URL: gs://data-platform-dbt-artifacts/target/*
   DBT_DEFERRED_ARTIFACTS_PATH: deferred_dbt_artifacts
 
 defaults:
@@ -62,7 +62,7 @@ jobs:
 
       - name: Download dbt artifacts from GCS
         run: |
-          gsutil cp $GCS_DBT_ARTIFACTS_URL $DBT_DEFERRED_ARTIFACTS_PATH
+          mkdir -p $DBT_DEFERRED_ARTIFACTS_PATH && gsutil cp $GCS_DBT_ARTIFACTS_URL $DBT_DEFERRED_ARTIFACTS_PATH
 
       - name: Conditionally set dbt slim-CI flags
         run: |

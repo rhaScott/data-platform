@@ -12,8 +12,8 @@ env:
   DBT_PROFILES_DIR: src/jaffle_shop
   DBT_PROJECT_DIR: src/jaffle_shop
   DBT_TARGET_DIR: src/jaffle_shop/target
+  DBT_STATE: ${{ github.workspace }}/deferred_dbt_artifacts
   GCS_DBT_ARTIFACTS_URL: gs://data-platform-dbt-artifacts/target/*
-  DBT_DEFERRED_ARTIFACTS_PATH: ${{ github.workspace }}/deferred_dbt_artifacts
 
 defaults:
   run:
@@ -57,32 +57,23 @@ jobs:
             poetry-$
 
       - name: Install Dependencies using Poetry
-        run: poetry install -vv
+        run: poetry install
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: Download dbt artifacts from GCS
         run: |
-          mkdir -p $DBT_DEFERRED_ARTIFACTS_PATH && gsutil cp $GCS_DBT_ARTIFACTS_URL $DBT_DEFERRED_ARTIFACTS_PATH
+          mkdir -p $DBT_STATE && gsutil cp -q $GCS_DBT_ARTIFACTS_URL $DBT_STATE
 
       - name: Conditionally set dbt slim-CI flags
         run: |
-          if [ -d $DBT_DEFERRED_ARTIFACTS_PATH ]; then
-            echo "DBT_FLAGS=--select state:modified+ --defer --state ${{ env.DBT_DEFERRED_ARTIFACTS_PATH }}" >> $GITHUB_ENV;
+          if [ -d $DBT_STATE ]; then
+            echo "DBT_FLAGS=--select state:modified+ --defer" >> $GITHUB_ENV;
           else
             echo "DBT_FLAGS=" >> $GITHUB_ENV;
           fi
 
       - name: dbt seed
         run: poetry run dbt seed --target ci
-
-      - name: ls flags
-        run: echo $DBT_FLAGS
-
-      - name: ls dir contents
-        run: ls $DBT_DEFERRED_ARTIFACTS_PATH
-
-      - name: export 
-        run: export DBT_STATE=${{ env.DBT_DEFERRED_ARTIFACTS_PATH }}
 
       - name: dbt build
         run: poetry run dbt build --target ci $DBT_FLAGS

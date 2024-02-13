@@ -12,8 +12,8 @@ env:
   DBT_PROFILES_DIR: src/jaffle_shop
   DBT_PROJECT_DIR: src/jaffle_shop
   DBT_TARGET_DIR: src/jaffle_shop/target
-  GCS_DBT_MANIFEST_URL: gs://data-platform-dbt-artifacts/manifest.json
-  DBT_DEFERRED_MANIFEST_PATH: deferred_manifest.json
+  GCS_DBT_ARTIFACTS_URL: gs://data-platform-dbt-artifacts
+  DBT_DEFERRED_ARTIFACTS_PATH: deferred_dbt_artifacts
 
 defaults:
   run:
@@ -62,12 +62,12 @@ jobs:
 
       - name: Download dbt artifacts from GCS
         run: |
-          gsutil cp $GCS_DBT_MANIFEST_URL $DBT_DEFERRED_MANIFEST_PATH
+          gsutil cp $GCS_DBT_ARTIFACTS_URL $DBT_DEFERRED_ARTIFACTS_PATH
 
       - name: Conditionally set dbt slim-CI flags
         run: |
-          if [ -f $DBT_DEFERRED_MANIFEST_PATH ]; then
-            echo "DBT_FLAGS=--select state:modified+ --defer --state $DBT_DEFERRED_MANIFEST_PATH" >> $GITHUB_ENV;
+          if [ -d $DBT_DEFERRED_ARTIFACTS_PATH ]; then
+            echo "DBT_FLAGS=--select state:modified+ --defer --state $DBT_DEFERRED_ARTIFACTS_PATH" >> $GITHUB_ENV;
           else
             echo "DBT_FLAGS=" >> $GITHUB_ENV;
           fi

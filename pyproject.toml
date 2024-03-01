@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.10"
 dbt-bigquery = "^1.7.3"
 python-dotenv = "^1.0.1"
+google-cloud-bigquery = "^3.17.2"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.6.0"

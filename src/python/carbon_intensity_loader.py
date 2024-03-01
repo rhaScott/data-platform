@@ -1,8 +1,8 @@
+import time
 from enum import Enum
 from typing import Dict, List
 
 import requests
-import time
 from google.api_core.exceptions import NotFound
 from google.cloud import bigquery
 

@@ -1,11 +1,8 @@
-import os
-from dataclasses import dataclass
-from datetime import datetime
 from enum import Enum
-from time import sleep
 from typing import Dict, List
 
 import requests
+import time
 from google.api_core.exceptions import NotFound
 from google.cloud import bigquery
 
@@ -45,7 +42,9 @@ class CarbonIntensityApiConfig:
 def get_carbon_intensity(date: str) -> Dict[str, str]:
     headers = {"Accept": "application/json"}
     r = requests.get(
-        f"https://api.carbonintensity.org.uk/intensity/date/{date}", headers=headers
+        f"https://api.carbonintensity.org.uk/intensity/date/{date}",
+        headers=headers,
+        timeout=5,
     )
     return r.json()["data"]
 

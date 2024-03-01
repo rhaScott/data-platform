@@ -36,6 +36,28 @@ repos:
     hooks:
       - id: black
 
+  - repo: https://github.com/pycqa/flake8
+    rev: "4.0.1" # pick a git hash / tag to point to
+    hooks:
+      - id: flake8
+        exclude: src/dbt/
+        additional_dependencies: [flake8-bugbear, flake8-bandit]
+        args:
+          - --ignore
+          - W605, S101, E203, W503, B907
+          - "--max-line-length=88"
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: "v0.960"
+    hooks:
+      - id: mypy
+        exclude: src/dbt/
+        language_version: "3.10"
+        args:
+          - --ignore-missing-imports
+          - --config-file
+          - mypy_pre_commit.ini
+
   - repo: https://github.com/tconbeer/sqlfmt
     rev: v0.18.0
     hooks:

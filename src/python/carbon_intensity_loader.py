@@ -17,13 +17,11 @@ class BigQueryConfig:
         table_id: str,
         project_id: str = "data-platform-413021",
         location: str = "EU",
-        # credentials_path: str = os.getenv("BIGQUERY_CREDENTIALS_PATH"),
     ):
         self.dataset_id = dataset_id
         self.table_id = table_id
         self.project_id = project_id
         self.location = location
-        # self.credentials_path = credentials_path
         self.full_table_id = f"{project_id}.{dataset_id}.{table_id}"
         self.full_dataset_id = f"{project_id}.{dataset_id}"
 
@@ -104,7 +102,6 @@ def main():
     data = get_carbon_intensity("2021-01-01")
     bq_client = bigquery.Client(
         project=CarbonIntensityBigQueryConfig.project_id,
-        # credentials=CarbonIntensityBigQueryConfig.credentials_path,
     )
     create_table_in_bigquery(bq_client, CarbonIntensityBigQueryConfig)
     insert_data_to_table(bq_client, CarbonIntensityBigQueryConfig.full_table_id, data)

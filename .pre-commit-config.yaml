@@ -1,4 +1,43 @@
 repos:
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.2.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: src/dbt/
+      - id: end-of-file-fixer
+        exclude: src/dbt/
+      - id: check-yaml
+        exclude: src/dbt/
+      - id: check-added-large-files
+        exclude: src/dbt/
+      - id: check-json
+        exclude: src/dbt/
+      - id: check-merge-conflict
+        exclude: src/dbt/
+      - id: debug-statements
+        exclude: src/dbt/
+      - id: mixed-line-ending
+        exclude: src/dbt/
+      - id: check-xml
+        exclude: src/dbt/
+      - id: pretty-format-json
+        exclude: src/dbt/
+        args: [--autofix]
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        name: isort (python)
+        args: ["--profile", "black"]
+
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+      - id: black
+
   - repo: https://github.com/tconbeer/sqlfmt
     rev: v0.18.0
     hooks:

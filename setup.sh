@@ -1,7 +1,7 @@
 ## Auth
 gcloud auth application-default login
 
-## GitHub Workflows: Workload Identity Pool & Provider Setup 
+## GitHub Workflows: Workload Identity Pool & Provider Setup
 # Create Github Pool
 gcloud iam workload-identity-pools create "github" \
   --project="${PROJECT_ID}" \
@@ -54,7 +54,7 @@ gcloud projects add-iam-policy-binding data-platform-413021 \
   --member='serviceAccount:data-platform@data-platform-413021.iam.gserviceaccount.com' \
   --role='roles/iam.serviceAccountUser'
 
-# This command is a little hazy, I ran it after things started working. 
+# This command is a little hazy, I ran it after things started working.
 # Going into https://console.cloud.google.com/iam-admin/workload-identity-pools/pool/github and granting access with repository_owner also worked.
   gcloud iam service-accounts add-iam-policy-binding data-platform@data-platform-413021.iam.gserviceaccount.com \
     --role='roles/iam.workloadIdentityUser' \
@@ -66,7 +66,11 @@ gcloud projects add-iam-policy-binding data-platform-413021 \
 
 gsutil mb -p data-platform-413021 -l EU gs://data-platform/
 
-# Below here hasn't been run. 
+
+#creating a service account
+gcloud iam service-accounts keys create ~/key.json --iam-account data-platform@data-platform-413021.iam.gserviceaccount.com
+
+# Below here hasn't been run.
 ################################
 ## Secret Manager Setup
 # Enable Secret Manager

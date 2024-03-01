@@ -77,4 +77,3 @@ jobs:
 
       - name: dbt build
         run: poetry run dbt build --target ci $DBT_FLAGS
-

@@ -20,5 +20,5 @@ jaffle_shop:
       method: oauth
       project: data-platform-413021
       location: EU
-      dataset: "dev_{{ env_var('USER','ci') }}" # local collision with dev intended for pre-commit 
+      dataset: "dev_{{ env_var('USER','ci') }}" # local collision with dev intended for pre-commit
       threads: 4

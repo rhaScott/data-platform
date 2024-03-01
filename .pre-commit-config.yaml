@@ -40,7 +40,6 @@ repos:
     rev: "4.0.1" # pick a git hash / tag to point to
     hooks:
       - id: flake8
-        exclude: src/dbt/
         additional_dependencies: [flake8-bugbear, flake8-bandit]
         args:
           - --ignore
@@ -51,7 +50,6 @@ repos:
     rev: "v0.960"
     hooks:
       - id: mypy
-        exclude: src/dbt/
         language_version: "3.10"
         args:
           - --ignore-missing-imports
